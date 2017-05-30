@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
        // ViewGroup linearLayout = (ViewGroup) findViewById(R.id.blackbutton);
 ImageView rook = (ImageView)findViewById(R.id.rook_icon);
         final ImageButton butt = new ImageButton(this);
-        final Button byt = new Button(this);
+        final Button byt = (Button)findViewById(R.id.button);
+
         Button huh = (Button)findViewById(R.id.button);
         byt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -42,7 +43,8 @@ ImageView rook = (ImageView)findViewById(R.id.rook_icon);
         });
         for (int i = 0; i < 8; i++){
             for (int y = 0; y < 8; y++){
-                Button bt = new Button(this);
+                Button bt = (Button)findViewById(R.id.button);
+
                 bt.setId(y);
                 bt.setText("Button " + y);
                 bt.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -51,6 +53,7 @@ ImageView rook = (ImageView)findViewById(R.id.rook_icon);
                 bt.setHeight(50);
                 bt.setY(i*50);
                 bt.setX(y*50);
+
                 theLayout.addView(bt);
             }
         }
