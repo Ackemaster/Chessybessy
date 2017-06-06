@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="@drawable/background"
-    android:id="@+id/mainlayout">
 
+    android:columnCount="8"
+    android:id="@+id/gamesLayout"
+    android:orientation="horizontal"
+    tools:context="com.example.axel.chess.MainActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -18,23 +22,32 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button3"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="39dp"
-        android:text="Your Games"
+        android:layout_marginTop="82dp"
+        android:text="Someone"
         android:layout_below="@+id/my_toolbar"
-        android:layout_centerHorizontal="true"
-        android:onClick="getGames"/>
+        android:layout_centerHorizontal="true" />
+
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/button4"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="99dp"
-        android:text="New Game"
+        android:layout_marginTop="38dp"
+        android:text="SomeoneElse"
+        android:layout_below="@+id/button3"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Games"
+        android:textSize="20dp"
+
         android:layout_below="@+id/my_toolbar"
-        android:layout_centerHorizontal="true"
-        android:onClick="newGame"/>
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

@@ -29,11 +29,15 @@ public class Piece {
         return Motive;
     }
 
-    public void getPossibleMoves(Piece[][]Pieces, HashMap<Integer, ImageButton>Buttons){
-
+    public void getPossibleMoves(Piece[][]Pieces, HashMap<Integer, ImageButton>Buttons, MainActivity mainActivity){
     }
 
-    public void restore(Piece[][]Pieces, HashMap<Integer, ImageButton> Buttons){
+    public void setSomethingThere(boolean input){
+        somethingThere = input;
+    }
+
+    public void restore(Piece[][]Pieces, HashMap<Integer, ImageButton> Buttons, MainActivity mainActivity){
+        final MainActivity tempAct = mainActivity;
         tempButtons = Buttons;
         tempPieces = Pieces;
         for(int i = 0; i<8; i++) {
@@ -43,10 +47,10 @@ public class Piece {
             }
             for (int x = 0; x< 8; x++) {
                 if (black) {
-                    tempButtons.get(i*8 + x).setBackgroundColor(Color.DKGRAY);
+                    tempButtons.get(i*8 + x).setBackgroundColor(Color.WHITE);
                     black = false;
                 } else {
-                    tempButtons.get(i*8 + x).setBackgroundColor(Color.WHITE);
+                    tempButtons.get(i*8 + x).setBackgroundColor(Color.DKGRAY);
                     black = true;
                 }
                 final int tempfinalY = i;
@@ -54,9 +58,9 @@ public class Piece {
                 tempButtons.get(i*8 + x).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        restore(tempPieces, tempButtons);
+                        restore(tempPieces, tempButtons, tempAct);
                         try{
-                        tempPieces[tempfinalY][tempFinalX].getPossibleMoves(tempPieces,tempButtons);
+                        tempPieces[tempfinalY][tempFinalX].getPossibleMoves(tempPieces,tempButtons, tempAct);
                     }catch(NullPointerException e){
 
                     }
@@ -66,42 +70,54 @@ public class Piece {
         Buttons = tempButtons;
     }
 
-    public void moves(HashMap<Integer, ImageButton> Buttons){
+    public void moves(Piece[][]Pieces, HashMap<Integer, ImageButton> Buttons, MainActivity mainActivity){
         thisPiece = this;
-        if (tempPieces[tempY][tempX]==null){
-            Buttons.get(tempY*8 + tempX).setBackgroundColor(Color.YELLOW);
-            Buttons.get(tempY*8 + tempX).setOnClickListener(new View.OnClickListener() {
+        tempPieces = Pieces;
+        tempButtons = Buttons;
+        final int insideTempX = tempX;
+        final int insideTempY = tempY;
+        final MainActivity tempAct = mainActivity;
+        if (tempPieces[insideTempY][insideTempX]==null){
+            tempButtons.get(insideTempY*8 + insideTempX).setBackgroundColor(Color.YELLOW);
+            tempButtons.get(insideTempY*8 + insideTempX).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     tempButtons.get(thisPiece.getY() * 8 + thisPiece.getX()).setImageResource(R.drawable.tom);
-                    tempButtons.get(tempY*8 + tempX).setImageResource(thisPiece.getMotive());
+                    tempButtons.get(insideTempY*8 + insideTempX).setImageResource(thisPiece.getMotive());
                     tempPieces[thisPiece.getY()][thisPiece.getX()] = null;
-                    tempPieces[tempY][tempX] = thisPiece;
-                    restore(tempPieces, tempButtons);
+                    tempPieces[insideTempY][insideTempX] = thisPiece;
+                    restore(tempPieces, tempButtons, tempAct);
+                    tempAct.writeGame(tempAct.getThisGame());
+                    tempAct.setMain();
                 }
             });
             Buttons = tempButtons;
+            Pieces = tempPieces;
         }
-        else if(tempPieces[tempY][tempX].getFriendly()!=this.getFriendly()){
-            Buttons.get(tempY*8 + tempX).setBackgroundColor(Color.YELLOW);
-            Buttons.get(tempY*8 + tempX).setOnClickListener(new View.OnClickListener() {
+        else if(tempPieces[insideTempY][insideTempX].getFriendly()!=this.getFriendly()){
+            tempButtons.get(insideTempY*8 + insideTempX).setBackgroundColor(Color.YELLOW);
+            tempButtons.get(insideTempY*8 + insideTempX).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     tempButtons.get(thisPiece.getY() * 8 + thisPiece.getX()).setImageResource(R.drawable.tom);
-                    tempButtons.get(tempY*8 + tempX).setImageResource(thisPiece.getMotive());
+                    tempButtons.get(insideTempY*8 + insideTempX).setImageResource(thisPiece.getMotive());
                     tempPieces[thisPiece.getY()][thisPiece.getX()] = null;
-                    tempPieces[tempY][tempX] = thisPiece;
-                    restore(tempPieces, tempButtons);
+                    tempPieces[insideTempY][insideTempX] = thisPiece;
+                    restore(tempPieces, tempButtons, tempAct);
+                    tempAct.writeGame(tempAct.getThisGame());
+                    tempAct.setMain();
                 }
             });
             Buttons = tempButtons;
-            somethingThere = true;
+            setSomethingThere(true);
+            Pieces = tempPieces;
         }
         else{
-            somethingThere = true;
+            setSomethingThere(true);
         }
+
     }
+
 
     public void setPosition(int inputY, int inputX){
         Y = inputY;
@@ -116,16 +132,23 @@ public class Piece {
     public boolean getFriendly(){
         return friendly;
     }
-    public boolean outOfBoundsX(int input) {
-        if (getX() + input>7 || getX() + input<0){
+    public boolean outOfBoundsX(int input, Piece pieceInput) {
+        if (pieceInput.getX() + input>7 || pieceInput.getX() + input<0){
             return false;
         }
         return true;
     }
-    public boolean outOfBoundsY(int input) {
-        if (getY() + input>7 || getY() + input<0){
+    public boolean outOfBoundsY(int input, Piece pieceInput) {
+        if (pieceInput.getY() + input>7 || pieceInput.getY() + input<0){
             return false;
         }
         return true;
+    }
+
+    public int getTempY(){
+        return tempY;
+    }
+    public int getTempX(){
+        return tempX;
     }
 }
